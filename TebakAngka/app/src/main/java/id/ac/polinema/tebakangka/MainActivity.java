@@ -12,25 +12,69 @@ import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
 
-	//  TODO: deklarasikan variabel di sini
+	private EditText Angka;
+	private Button tombolTebak, tombolReset;
+
+	int min = 1;
+	int maks = 100;
+
+	int angkaAcak = initRandomNumber();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		// TODO: bind layout di sini
+
+		Angka = findViewById(R.id.number_input);
+		tombolTebak = findViewById(R.id.guess_button);
+		tombolReset = findViewById(R.id.reset_button);
+
 	}
 
 	// TODO: generate angka random di sini
-	private void initRandomNumber() {
-
+	private int initRandomNumber() {
+		int acak = (int) (Math.random() * ((maks - min) + 1)) + min;
+		return acak;
 	}
 
 	public void handleGuess(View view) {
-		// TODO: Tambahkan logika untuk melakukan pengecekan angka
+		if(Angka.getText().toString().equals("")){
+			Toast.makeText(this, "Isi tebakan anda", Toast.LENGTH_SHORT).show();
+		}
+
+		else{
+			int tebakanAngka = Integer.parseInt(Angka.getText().toString());
+
+			if(tebakanAngka > maks)	{
+				Toast.makeText(this, "Tebakan lebih dari 100", Toast.LENGTH_SHORT).show();
+			}
+
+			else if(tebakanAngka < min)	{
+				Toast.makeText(this, "Tebakan angka kurang dari 1", Toast.LENGTH_SHORT).show();
+			}
+
+			else if(tebakanAngka > angkaAcak) {
+				Toast.makeText(this, "Tebakan angka terlalu besar", Toast.LENGTH_SHORT).show();
+			}
+
+			else if(tebakanAngka < angkaAcak) {
+				Toast.makeText(this, "Tebakan angka terlalu kecil", Toast.LENGTH_SHORT).show();
+			}
+
+			else{
+				Toast.makeText(this, "Tebakan tepat", Toast.LENGTH_SHORT).show();
+				tombolTebak.setEnabled(false);
+				Angka.setEnabled(false);
+				tombolReset.setEnabled(true);
+			}
+		}
 	}
 
 	public void handleReset(View view) {
-		// TODO: Reset tampilan
+		Angka.setText("");
+		tombolTebak.setEnabled(true);
+		Angka.setEnabled(true);
+		angkaAcak = initRandomNumber();
+		tombolReset.setEnabled(false);
 	}
 }
